@@ -7,5 +7,5 @@ app = Flask(__name__)
 api = Api(app)
 dbConnection = DatabaseConnection("ecofootprint", "mongodb://Joshua:12345@localhost/ecofootprint")
 
-api.add_resource(Country, "/countries", "/countries/<string:countryName>")
+api.add_resource(Country, "/countries", "/countries/" "/countries/<string:countryName>")
 app.run(debug=True)
