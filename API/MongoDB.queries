@@ -8,3 +8,7 @@ db.createUser({
 db.updateUser("Joshua",{
     pwd: "12345"
 });
+
+db.collectionName.find() //SELECT * FROM TBL
+
+db.collectionName.drop() //DROP TBL

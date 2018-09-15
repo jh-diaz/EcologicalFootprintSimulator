@@ -1,21 +1,29 @@
 from flask_restful import Resource
 from flask import request
 from models.Country import Country as Model
+from flask_jwt_simple import jwt_required
 
 class Country(Resource):
+    @jwt_required
+    # Authorization header, with value of: Bearer $accessKeyGoesHere$
     def get(self, countryName: str = None):
-        countryDict = {}
         # No mongoengine available for serializing mongoengine objects to json, so a manual way to do it:
         if(countryName is None):
-            return self.parseMongoEngineObjectToJSON(Model.objects())
+            return self.parseMongoEngineObjectToJSON(Model.objects()), 200
         else:
-            return self.parseMongoEngineObjectToJSON(Model.objects(countryName=countryName))
-    
+            return self.parseMongoEngineObjectToJSON(Model.objects(countryName=countryName)), 200
+
+    @jwt_required
+    # Authorization header, with value of: Bearer $accessKeyGoesHere$
     def delete(self, countryName: str):
         modelObject = Model.objects(countryName=countryName)
         modelObject.delete()
-        return {"msg": "Successfully deleted " + countryName}, 200
+        return {
+            "message": "Successfully deleted " + countryName
+        }, 204
 
+    @jwt_required
+    # Authorization header, with value of: Bearer $accessKeyGoesHere$
     def post(self):
         newCountry = Model(countryName=request.form.get("countryName"), 
         population=request.form.get("population"),
@@ -27,7 +35,10 @@ class Country(Resource):
         earthsRequired=request.form.get("earthsRequired"))
         newCountry.save()
         
-        return {"message" : "Successfully created country."}, 201
+        return {
+            "message" : "Successfully created country.",
+            "href": "/countries/"+request.form.get("countryName")
+        }, 201
 
     def parseMongoEngineObjectToJSON(self, modelObjects):
         countryDict = {}
