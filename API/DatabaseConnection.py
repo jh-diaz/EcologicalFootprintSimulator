@@ -1,12 +1,13 @@
 class DatabaseConnection:
-    def __init__(self):
-        self.connectToMongoDB()
-    
-    def connectToMongoDB(self):
-        from mongoengine import connect
-        connect("ecofootprint", host='mongodb://Joshua:12345@localhost/ecofootprint')
+    def __init__(self, databaseName: str, hostUrl: str):
+        self.__databaseName = databaseName
+        self.__hostUrl = hostUrl
+        self.__connectToMongoDB()
 
-x = DatabaseConnection()
-from Models import Country
-y = Country(countryName="haha")
-y.save()
+    def __connectToMongoDB(self):
+        from mongoengine import connect
+        try:
+            connect(self.__databaseName, host=self.__hostUrl)
+        except(Exception):
+            import sys
+            sys.exit("Cannot connect to the database.")
