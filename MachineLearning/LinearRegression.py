@@ -5,25 +5,10 @@ from math import floor
 
 
 class Regression():
-    def __init__(self, country, column):
-        df = pd.read_csv('test.csv')
-
-        df = (df[df['country'].str.contains(country)])
-
-        x = df[[column]]
-        y = df[['year']]
-
-        x_train, y_train, x_test, y_test = self.setTrainTestSet(x, y)
-
+    def train(self, y_train, x_train):
         self.regr = linear_model.LinearRegression()
 
         self.regr.fit(y_train, x_train)
-
-        y_pred = self.regr.predict(x_test)
-
-        # print('coeff: ', self.regr.coef_)
-        #
-        # print('mean abs error: %.2f' % mean_absolute_error(y_test, y_pred))
 
     def setTrainTestSet(self, x, y):
         ratio = 90
@@ -41,3 +26,8 @@ class Regression():
         pred = self.regr.predict(dataframe)
         return pred[0][0]
 
+    def errorPredict(self, df):
+        return self.regr.predict(df)
+
+    def getMAE(self, test, predicted):
+        return mean_absolute_error(test, predicted)
