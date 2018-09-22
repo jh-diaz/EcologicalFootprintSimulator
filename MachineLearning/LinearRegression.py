@@ -1,6 +1,7 @@
 import pandas as pd
 from sklearn import linear_model
 from sklearn.metrics import mean_absolute_error
+from sklearn.metrics import mean_squared_error
 from math import floor
 
 
@@ -31,3 +32,6 @@ class Regression():
 
     def getMAE(self, test, predicted):
         return mean_absolute_error(test, predicted)
+
+    def getMSE(self, test, predicted):
+        return mean_squared_error(test, predicted)
