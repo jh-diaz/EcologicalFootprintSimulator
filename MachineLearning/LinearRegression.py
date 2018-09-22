@@ -22,11 +22,13 @@ class Regression():
         y_test = y[trainlength:]
         return x_train, y_train, x_test, y_test
 
+    # Get the predicted value only
     def predict(self, year):
         dataframe = pd.DataFrame([year], columns=[''])
         pred = self.regr.predict(dataframe)
         return pred[0][0]
 
+    # Get the predicted value raw value
     def errorPredict(self, df):
         return self.regr.predict(df)
 

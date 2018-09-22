@@ -6,8 +6,10 @@ class Footprint:
     def __init__(self):
         self.df = pd.read_csv('compiled data.csv')
         self.footprints = ['Cropland Footprint', 'Grazing Footprint', 'Forest Footprint', 'Carbon Footprint',
-                           'Fish Footprint', 'Urban Land']
+                           'Fish Footprint']  # , 'Urban Land']
 
+    # Gets the population (in millions)
+    # input requires the country and the year you want the predicted population to be in
     def getPopulation(self, country, year):
         y = (self.df[self.df['Country'] == country])
 
@@ -35,6 +37,8 @@ class Footprint:
         pred = regression.predict(year)
         return pred, error
 
+    # Gets the footprints (Cropland, Grazing, Forest, Carbon, Fish, Urban Land)
+    # input requires the country and the year you want the predicted footprint to be in
     def getFootprints(self, country, year):
         pop = self.getPopulation(country, 2016)[0]
         pop2 = self.getPopulation(country, year)[0]
@@ -58,6 +62,6 @@ class Footprint:
         if len(country) == 0:
             raise ValueError('(%s) country is not found in the database.' % country)
 
-
-f = Footprint()
-print(f.getPopulation('Afghanistan', 2014))
+# example usage
+# f = Footprint()
+# print(f.getPopulation('Afghanistan', 2014))
