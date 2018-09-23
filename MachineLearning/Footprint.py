@@ -52,7 +52,7 @@ class Footprint:
         for i in range(len(self.footprints)):
             footprintValues[i].insert(0, self.footprints[i])
         for i in footprintValues:
-            resourceIncRatio = popInc * i[1]
+            resourceIncRatio = popInc * i[1] / 100
             newFpValue = (resourceIncRatio + i[1]) * pop2
             yearValues.append([i[0], newFpValue])
         return yearValues
@@ -63,5 +63,5 @@ class Footprint:
             raise ValueError('(%s) country is not found in the database.' % country)
 
 # example usage
-# f = Footprint()
-# print(f.getPopulation('Afghanistan', 2014))
+f = Footprint()
+print(f.getFootprints('Afghanistan', 1900))
