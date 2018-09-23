@@ -8,5 +8,4 @@
         document.getElementById("mySidenav").style.width = "0";
         document.getElementById("main").style.marginLeft= "0px";
         document.getElementById("mapid").style.marginRight = "0px"; 
-        
     }

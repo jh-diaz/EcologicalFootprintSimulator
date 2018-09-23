@@ -13,52 +13,50 @@
 </head>
 <body>
     <div id="mySidenav" class="sidenav">
-          <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">Minimize</a>
+        <table style="color: black; width: 100%; padding-right: 20px">
+            <tr>
+                <th style="text-align: left; padding-left: 20px; width: 100%;">
+                    <h2>Configuration</h2>
+                </th>
+                <th>
+                    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"><img src="icons/cancel.png" width=20/></a>
+                </th>
+            </tr>
+        </table>
         <div id="selections">
-            <h5>Select Country</h5>
-            <form action="#" method="get">
-                <input list="countries" name="country">
-                    <datalist id="countries">
-                        <option value="Country 1">
-                        <option value="Country 2">
-                        <option value="Country 3">
-                        <option value="Country 4">
-                        <option value="Country 5">
-                    </datalist>
-                <br>
-                <input type="submit">
+            <h3>Select Country</h3>
+            <form>
+              <select id="country" name="country">
+                <option value="au">Australia</option>
+                <option value="ca">Canada</option>
+                <option value="usa">USA</option>
+              </select>
             </form>
-            <h5>Select Year</h5>
-            <form action="#" method="get">
-                <input list="years" name="year">
-                    <datalist id="years">
-                        <option value="19xx">
-                        <option value="19xx">
-                        <option value="19xx">
-                        <option value="19xx">
-                        <option value="19xx">
-                    </datalist>
-                <br>
-                <input type="submit">
+            <h3>Select Year</h3>
+            <form>
+              <select id="year" name="year">
+                <option value="1994">1994</option>
+                <option value="1995">1995</option>
+                <option value="1996">1996</option>
+              </select>
             </form>
-            <h5>Select Category</h5>
-            <form action="#" method="get">
-                <input list="categories" name="category">
-                    <datalist id="categories">
-                        <option value="Crop Land">
-                        <option value="Fish">
-                        <option value="Forest">
-                        <option value="Grazing">
-                        <option value="Urban Land">
-                    </datalist>
-                <br>
-                <input type="submit">
+            <h3>Select Category</h3>
+            <form>
+              <select id="category" name="category">
+                  <option value="Crop Land">Crop Land</option>
+                  <option value="Fish">Fish</option>
+                  <option value="Forest">Forest</option>
+                  <option value="Grazing">Grazing</option>
+                  <option value="Urban Land">Urban Land</option>
+              </select>
             </form>
+            <br>
             <button>Simulate</button>
+            <button>Reset</button>            
         </div>
     </div>
     <div id=header>
-        <table style="width: 100%;">
+        <table style="color: white; width: 100%;">
             <tr>
                 <th style="text-align: left; padding-left: 20px; width: 100%"><h2>Ecological Footprint Simulator</h2></th>
                 <th><span style="text-align: right;font-size:30px;cursor:pointer;padding-right: 15px" onclick="openNav()">Configuration</span></th>
