@@ -4,6 +4,8 @@ from models.Country import Country as Model
 from flask_jwt_simple import jwt_required
 
 class Country(Resource):
+    """ 
+    Original get request endpoint commented out for debugging.
     @jwt_required
     # Authorization header, with value of: Bearer $accessKeyGoesHere$
     def get(self, countryName: str = None):
@@ -11,8 +13,13 @@ class Country(Resource):
         if(countryName is None):
             return self.parseMongoEngineObjectToJSON(Model.objects()), 200
         else:
-            return self.parseMongoEngineObjectToJSON(Model.objects(countryName=countryName)), 200
+            return self.parseMongoEngineObjectToJSON(Model.objects(countryName=countryName)), 200 
+    """
 
+    def get(self):
+        from Country import Country as longLat
+        longLatObj = longLat()
+        return longLatObj.getCountryLatLongPoints(), 200
     @jwt_required
     # Authorization header, with value of: Bearer $accessKeyGoesHere$
     def delete(self, countryName: str):

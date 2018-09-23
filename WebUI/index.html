@@ -2,13 +2,8 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <link rel="stylesheet" href="css/leaflet.css"
-       integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
-       crossorigin=""/>
-    <script src="js/leaflet.js"
-       integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA=="
-       crossorigin=""></script>
+    <link rel="stylesheet" href="css/leaflet.css">
+    <script src="js/leaflet.js"></script>
     <link href="css/stylesheet.css" rel="stylesheet">
 </head>
 <body>
@@ -51,7 +46,7 @@
               </select>
             </form>
             <br>
-            <button>Simulate</button>
+            <button id="btnSimulate">Simulate</button>
             <button>Reset</button>            
         </div>
     </div>
@@ -64,6 +59,30 @@
         </table>
     </div>
     <div id="mapid"></div>
+    <script>
+        let countryList = {}
+
+        btnSimulate = document.getElementById("btnSimulate");
+        btnSimulate.addEventListener("click", function(){
+            sendRequest("GET", "http://127.0.0.1:5000/countries", "", "json");
+        });
+
+        function sendRequest(requestType, url, parameters, responseType){
+            let request = new XMLHttpRequest();
+            request.responseType = responseType
+            request.addEventListener("readystatechange", function(){
+                //For pre-defined ready state constants,
+                //refer to: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/readyState 
+                if(request.readyState == 4 && request.status == 200){
+                        countryList = request.response
+                        console.log(countryList)
+                }
+            });
+            request.open(requestType, (url+parameters), true);
+            request.send(null);
+        }
+
+    </script>
     <script src="js/navbar.js"></script>
     <script src="js/initmap.js"></script>
     <script src="js/pinnedlocation.js"></script>
