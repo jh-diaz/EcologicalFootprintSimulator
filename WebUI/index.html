@@ -22,9 +22,6 @@
             <h3>Select Country</h3>
             <form>
               <select id="country" name="country">
-                <option value="au">Australia</option>
-                <option value="ca">Canada</option>
-                <option value="usa">USA</option>
               </select>
             </form>
             <h3>Select Year</h3>
@@ -60,12 +57,9 @@
     </div>
     <div id="mapid"></div>
     <script>
-        let countryList = {}
-
-        btnSimulate = document.getElementById("btnSimulate");
-        btnSimulate.addEventListener("click", function(){
-            sendRequest("GET", "http://127.0.0.1:5000/countries", "", "json");
-        });
+        let countryDict = {}
+        let dropdownCountries = document.getElementById("country");
+        let btnSimulate = document.getElementById("btnSimulate");
 
         function sendRequest(requestType, url, parameters, responseType){
             let request = new XMLHttpRequest();
@@ -74,14 +68,25 @@
                 //For pre-defined ready state constants,
                 //refer to: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/readyState 
                 if(request.readyState == 4 && request.status == 200){
-                        countryList = request.response
-                        console.log(countryList)
+                    console.log(request.response);
+                    //countryDict = new Map(Object.entries(request.response));
                 }
             });
             request.open(requestType, (url+parameters), true);
             request.send(null);
         }
 
+        function populateCountryDropdown(){
+            sendRequest("GET", "http://127.0.0.1:5000/countries", "", "json");
+            for(let key of countryDict.keys()){
+                let newCountryOption = document.createElement("option");
+                newCountryOption.setAttribute("value", key);
+                newCountryOption.text = key;
+                dropdownCountries.appendChild(newCountryOption);
+            }
+        }
+
+        populateCountryDropdown();
     </script>
     <script src="js/navbar.js"></script>
     <script src="js/initmap.js"></script>

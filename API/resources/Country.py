@@ -17,8 +17,8 @@ class Country(Resource):
     """
 
     def get(self):
-        from Country import Country as longLat
-        longLatObj = longLat()
+        from Country import Country
+        longLatObj = Country()
         return longLatObj.getCountryLatLongPoints(), 200
     @jwt_required
     # Authorization header, with value of: Bearer $accessKeyGoesHere$
