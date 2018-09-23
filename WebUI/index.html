@@ -27,9 +27,6 @@
             <h3>Select Year</h3>
             <form>
               <select id="year" name="year">
-                <option value="1994">1994</option>
-                <option value="1995">1995</option>
-                <option value="1996">1996</option>
               </select>
             </form>
             <h3>Select Category</h3>
@@ -39,7 +36,7 @@
                   <option value="Fish">Fish</option>
                   <option value="Forest">Forest</option>
                   <option value="Grazing">Grazing</option>
-                  <option value="Urban Land">Urban Land</option>
+                  <option value="Carbon">Carbon</option>
               </select>
             </form>
             <br>
@@ -56,40 +53,85 @@
         </table>
     </div>
     <div id="mapid"></div>
+    <script src="js/navbar.js"></script>
+    <script src="js/initmap.js"></script>
     <script>
-        let countryDict = {}
+        let countryMap = {}
         let dropdownCountries = document.getElementById("country");
         let btnSimulate = document.getElementById("btnSimulate");
+        let dropdownYears = document.getElementById("year");
+        let countryName, year = "";
 
-        function sendRequest(requestType, url, parameters, responseType){
+        btnSimulate.addEventListener("click", senPredictionRequest);
+
+        function senPredictionRequest(){
+            countryName = getSelectedOption(dropdownCountries);
+            year = getSelectedOption(dropdownYears);
+            let url = "http://127.0.0.1:5000/predict/COUNTRY_HOLDER/YEAR_HOLDER";
+            url = url.replace("COUNTRY_HOLDER", countryName).replace("YEAR_HOLDER", year);
+            sendRequest("GET", url, "", "json", createMarker);
+        }
+
+        function createMarker(response){
+            let marker = L.marker([countryMap.get(countryName).Latitude,
+            countryMap.get(countryName).Longitude]).addTo(mymap);
+
+            let markerCountry = `<b>Selected Country:</b> ${countryName}<br>`;
+            let markerYear = `<b>In Year: </b> ${year}<br>`;
+            let markerPopulation = `<b>Population:</b> ${response["Population"]}<br>`;
+            let markerCropland = `<b>Cropland Consumption:</b> ${response["Cropland Footprint"]}<br>`;
+            let markerGrazing = `<b>Grazing Land Consumption:</b> ${response["Grazing Footprint"]}<br>`;
+            let markerForest = `<b>Forest Land Consumption:</b> ${response["Forest Footprint"]}<br>`;
+            let markerCarbon = `<b>Carbon Consumption:</b> ${response["Carbon Footprint"]}<br>`;
+            let markerFish = `<b>Fish Consumption:</b> ${response["Fish Footprint"]}<br>`;
+            
+            let markerData = markerCountry + markerYear + markerPopulation + markerCropland 
+            + markerGrazing + markerForest + markerCarbon + markerFish;
+            marker.bindPopup(markerData).openPopup();
+        }
+
+        function getSelectedOption(selectElement){
+            return selectElement.options[selectElement.selectedIndex].value;
+        }
+
+        function sendRequest(requestType, url, parameters, responseType, callback){
             let request = new XMLHttpRequest();
             request.responseType = responseType
             request.addEventListener("readystatechange", function(){
                 //For pre-defined ready state constants,
                 //refer to: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/readyState 
                 if(request.readyState == 4 && request.status == 200){
-                    console.log(request.response);
-                    //countryDict = new Map(Object.entries(request.response));
+                   callback(request.response);
                 }
             });
             request.open(requestType, (url+parameters), true);
             request.send(null);
         }
 
-        function populateCountryDropdown(){
-            sendRequest("GET", "http://127.0.0.1:5000/countries", "", "json");
-            for(let key of countryDict.keys()){
-                let newCountryOption = document.createElement("option");
-                newCountryOption.setAttribute("value", key);
-                newCountryOption.text = key;
-                dropdownCountries.appendChild(newCountryOption);
+        function populateCountryDropdown(countries){
+            countryMap = new Map(Object.entries(countries));
+            for(let key of countryMap.keys()){
+                dropdownCountries.appendChild(createNewChild("option", key, key));
             }
         }
 
-        populateCountryDropdown();
+        function populateYearDropdown(){
+            for(let index=2000; index<=2015; index++){
+                dropdownYears.appendChild(createNewChild("option", index, index));
+            }
+        }
+
+        function createNewChild(elementType, text, value){
+            let newElement = document.createElement("option");
+            newElement.setAttribute("value", value);
+            newElement.text = text;
+
+            return newElement;
+        }
+
+        sendRequest("GET", "http://127.0.0.1:5000/countries", "", "json", populateCountryDropdown);
+        populateYearDropdown();
+
     </script>
-    <script src="js/navbar.js"></script>
-    <script src="js/initmap.js"></script>
-    <script src="js/pinnedlocation.js"></script>
 </body>
 </html>

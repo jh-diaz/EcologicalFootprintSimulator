@@ -1,7 +1,7 @@
 class Country:
     def __init__(self):
         import pandas
-        self.countries = pandas.read_csv("countries.csv")
+        self.countries = pandas.read_csv("API/resources/countries.csv")
         self.countries = self.countries[["Country", "Longitude", "Latitude"]]
 
     def getCountryLatLongPoints(self):

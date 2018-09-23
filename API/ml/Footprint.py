@@ -1,10 +1,10 @@
 import pandas as pd
-import LinearRegression as lr
+import ml.LinearRegression as lr
 
 
 class Footprint:
     def __init__(self):
-        self.df = pd.read_csv('compiled data.csv')
+        self.df = pd.read_csv('API/ml/compiled data.csv')
         self.footprints = ['Cropland Footprint', 'Grazing Footprint', 'Forest Footprint', 'Carbon Footprint',
                            'Fish Footprint']  # , 'Urban Land']
 
@@ -62,6 +62,3 @@ class Footprint:
         if len(country) == 0:
             raise ValueError('(%s) country is not found in the database.' % country)
 
-# example usage
-f = Footprint()
-print(f.getFootprints('Afghanistan', 1900))

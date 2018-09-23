@@ -16,10 +16,11 @@ class Country(Resource):
             return self.parseMongoEngineObjectToJSON(Model.objects(countryName=countryName)), 200 
     """
 
-    def get(self):
-        from Country import Country
+    def get(self, countryName: str = None, year: int = None):
+        from resources.Countries import Country
         longLatObj = Country()
         return longLatObj.getCountryLatLongPoints(), 200
+            
     @jwt_required
     # Authorization header, with value of: Bearer $accessKeyGoesHere$
     def delete(self, countryName: str):
