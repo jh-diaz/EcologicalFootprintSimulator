@@ -54,7 +54,7 @@ class Footprint:
         for i in footprintValues:
             resourceIncRatio = popInc * i[1] / 100
             newFpValue = (resourceIncRatio + i[1]) * pop2
-            yearValues.append([i[0], newFpValue])
+            yearValues.append([i[0], abs(newFpValue)])
         return yearValues
 
     def checkIfCountryExists(self, country):

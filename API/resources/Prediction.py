@@ -18,7 +18,9 @@ class Prediction(Resource):
                 "Grazing Footprint" : footprintPrediction[1][1],
                 "Forest Footprint" : footprintPrediction[2][1],
                 "Carbon Footprint" : footprintPrediction[3][1],
-                "Fish Footprint" : footprintPrediction[4][1]
+                "Fish Footprint" : footprintPrediction[4][1],
+                "Percentage of error" : populationPrediction[1
+                ]
             }, 200
         except:
             return{
