@@ -4,6 +4,7 @@ from DatabaseConnection import DatabaseConnection
 from resources.Country import Country
 from resources.User import User
 from resources.Prediction import Prediction
+from resources.Graph import Graph
 from flask_jwt_simple import JWTManager, jwt_required
 from flask_cors import CORS
 import secrets
@@ -20,5 +21,6 @@ dbConnection = DatabaseConnection("ecofootprint", "mongodb://Joshua:12345@localh
 api.add_resource(Country, "/countries")
 api.add_resource(User, "/auth")
 api.add_resource(Prediction, "/predict/<string:countryName>/<string:year>")
+api.add_resource(Graph, "/graph/<string:countryName>")
 
 app.run(debug=True)

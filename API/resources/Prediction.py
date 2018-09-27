@@ -22,7 +22,8 @@ class Prediction(Resource):
                 "Percentage of error" : populationPrediction[1
                 ]
             }, 200
-        except:
+        except Exception as x:
+            print(x)
             return{
                 "Message": "Erroneous response from the server. Country might not be supported."
             }, 404
