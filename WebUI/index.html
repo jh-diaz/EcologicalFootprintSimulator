@@ -67,7 +67,6 @@
                 <div class="divider"></div>
             </li>
             <li>
-                <button id="btnSimulate">Simulate</button>
                 <a id="btnSimulate" class="waves-effect waves-teal btn-flat">
                     <i class="material-icons">done</i>Simulate</a>
             </li>
@@ -82,9 +81,18 @@
         </ul>
         <div id="modal1" class="modal">
             <div class="modal-content">
-                <h4>Philippines</h4>
-                <p>Detailed ecological footprint.</p>
-                <canvas id="myChart" width="400" height="200"></canvas>
+                <h4 id="countryName">Philippines</h4>
+                <hr>
+                <p><span style="font-weight: bold;">Population: </span>the number of people living in a certain region or country. 
+                Measured in millions.</p>
+                <canvas id="populationChart" width="400" height="200"></canvas>
+                <hr>
+                <p><span style="font-weight: bold;">Crop Footprint: </span>the area of land required to grow all crop products, including livestock feed, fish meal, oil crops and rubber. Ratio of the area of croplands in hectares, against the harvested quantity.</p>
+                <p><span style="font-weight: bold;">Fish Footprint: </span>calculated based on the annual primary production required to sustain all harvested aquatic species against its average trophic level.</p>
+                <p><span style="font-weight: bold;">Forest Footprint: </span>measures the annual harvest of fuelwood and timber to supply forest products. Calculated as the footprint of forest land according to the production quantities of primary timber products and wood fuel products.</p>
+                <p><span style="font-weight: bold;">Grazing Footprint: </span>measures the ratio of grassland in hectares used in addition to crop feeds to support livestock.</p>
+                <p><span style="font-weight: bold;">Carbon Footprint: </span>the uptake ratio of land to mitigate carbon dioxide and other greenhouse gas emissions. </p>
+                <canvas id="footprintChart" width="400" height="200"></canvas>
             </div>
             <div class="modal-footer">
                 <a href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
@@ -108,35 +116,39 @@
             let btnSimulate = document.getElementById("btnSimulate");
             let dropdownYears = document.getElementById("year");
             let countryName, year = "";
+            let url = "";
+            let lblCountryName = document.getElementById("countryName");
+            let currentMarker = null;
 
             btnSimulate.addEventListener("click", senPredictionRequest);
-            btnSimulate.addEventListener("onClick", senPredictionRequest);
             
 
             function senPredictionRequest(){
                 $('.sidenav').sidenav();
                 countryName = getSelectedOption(dropdownCountries);
                 year = getSelectedOption(dropdownYears);
-                let url = "http://127.0.0.1:5000/predict/COUNTRY_HOLDER/YEAR_HOLDER";
+                url = "http://127.0.0.1:5000/predict/COUNTRY_HOLDER/YEAR_HOLDER";
                 url = url.replace("COUNTRY_HOLDER", countryName).replace("YEAR_HOLDER", year);
                 sendRequest("GET", url, "", "json", createMarker);
             }
 
             function createMarker(response){
-                let marker = L.marker([countryMap.get(countryName).Latitude,
+                if(currentMarker != null){
+                    mymap.removeLayer(currentMarker);
+                }
+                currentMarker = L.marker([countryMap.get(countryName).Latitude,
                                        countryMap.get(countryName).Longitude]).addTo(mymap);
-
                 let markerCountry = `<b>Selected Country:</b> ${countryName}<br>`;
                 let markerYear = `<b>In Year: </b> ${year}<br>`;
                 let markerPopulation = `<b>Population:</b> ${response["Population"]}<br>`;
-                let markerCropland = `<b>Cropland Consumption:</b> ${response["Cropland Footprint"]}<br>`;
-                let markerGrazing = `<b>Grazing Land Consumption:</b> ${response["Grazing Footprint"]}<br>`;
-                let markerForest = `<b>Forest Land Consumption:</b> ${response["Forest Footprint"]}<br>`;
-                let markerCarbon = `<b>Carbon Consumption:</b> ${response["Carbon Footprint"]}<br>`;
-                let markerFish = `<b>Fish Consumption:</b> ${response["Fish Footprint"]}<br>`;
-                let markerDetails = '<a class="modal-trigger" href="#modal1" onclick="test();">More Details</a>';
-                let markerData = markerCountry + markerYear + markerPopulation + markerCropland + markerGrazing + markerForest + markerCarbon + markerFish + markerDetails;
-                marker.bindPopup(markerData).openPopup();
+                let markerCropland = `<b>Crop:</b> ${response["Cropland Footprint"]}<br>`;
+                let markerGrazing = `<b>Grazing:</b> ${response["Grazing Footprint"]}<br>`;
+                let markerForest = `<b>Forest:</b> ${response["Forest Footprint"]}<br>`;
+                let markerCarbon = `<b>Carbon:</b> ${response["Carbon Footprint"]}<br>`;
+                let markerFish = `<b>Fish:</b> ${response["Fish Footprint"]}<br>`;
+                let markerDetails = '<a class="modal-trigger" href="#modal1" onclick="initGraph();">More Details</a>';
+                let markerData = markerCountry + markerYear + markerPopulation + markerCropland + markerFish + markerForest + markerGrazing  + markerCarbon  + markerDetails;
+                currentMarker.bindPopup(markerData).openPopup();
             }
 
             function getSelectedOption(selectElement){
@@ -150,7 +162,6 @@
                     //For pre-defined ready state constants,
                     //refer to: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/readyState 
                     if(request.readyState == 4 && request.status == 200){
-                        console.log(request.response);
                         callback(request.response);
                     }
                 });
@@ -183,7 +194,8 @@
 
             sendRequest("GET", "http://127.0.0.1:5000/countries", "", "json", populateCountryDropdown);
             populateYearDropdown();
-            var ctx = document.getElementById("myChart");
+            let populationChartCanvas = document.getElementById("populationChart");
+            let footprintChartCanvas = document.getElementById("footprintChart");
 
             function getGraphData(data){
                 console.log(data);
@@ -194,7 +206,7 @@
                 forest = []
                 grazing = []
                 carbon = []
-                for(let i = 2000; i <= 2015; i++){
+                for(let i = parseInt(getSelectedOption(dropdownYears)); i <= 2015; i++){
                     labels.push(i);
                     currentData = data[i];
                     pop.push(currentData["Population"])
@@ -208,7 +220,7 @@
             }
 
             function setupGraph(labels, pop, crop, fish, forest, grazing, carbon){
-                var myChart = new Chart(ctx, {
+                let footprintChart = new Chart(footprintChartCanvas, {
                     type: 'line',
                     data: {
                         labels: labels,
@@ -278,13 +290,38 @@
                         }
                     }
                 });
+                let populationChart = new Chart(populationChartCanvas, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Population',
+                            data: pop,
+                            backgroundColor: [
+                                'rgba(153, 102, 255, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(153, 102, 255, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero:true
+                                }
+                            }]
+                        }
+                    }
+                });
             }
 
-            function test(){
-                sendRequest("GET", "http://127.0.0.1:5000/graph/Philippines", "", "json", getGraphData);
+            function initGraph(){
+                lblCountryName.innerHTML = getSelectedOption(dropdownCountries);
+                sendRequest("GET", "http://127.0.0.1:5000/graph/"+countryName, "", "json", getGraphData);
             }
-
-
         </script>
     </body>
 </html>
