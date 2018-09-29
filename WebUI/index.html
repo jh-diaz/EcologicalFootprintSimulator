@@ -12,13 +12,25 @@
     <body>
         <nav>
             <div class="nav-wrapper">
-                <a href="#" class="brand-logo right" style="padding-right: 15px">Ecological Footprint Simulator</a>
-                <a href="#" data-target="slide-out" class="sidenav-trigger show-on-large"><i class="material-icons">build</i></a>
+                <a href="index.html" class="brand-logo center"><img style="height: 30px; vertical-align: middle" src="icons/main.png">    Ecological Footprint Simulator</a>
+                <ul id="nav-mobile" class="left hide-on-med-and-down">
+                    <li><a href="#" data-target="slide-out" class="sidenav-trigger show-on-large"><i class="material-icons">build</i></a></li>
+                </ul>
             </div>
         </nav>
         <ul id="slide-out" class="sidenav">
             <li>
-                <h5 style="padding-left: 20px; padding-bottom: 5px;">Configuration</h5>
+                <table>
+                    <tr>
+                        <td>
+                            <h5 style="padding-left: 20px; padding-bottom: 5px;">Configuration</h5>
+                        </td>
+                        <td>
+                            <a data-target="slide-out" class="sidenav-close waves-effect waves-teal btn-flat">
+                                <i class="material-icons">arrow_back</i></a>
+                        </td>
+                    </tr>
+                </table>
             </li>
             <li>            
                 <h6 style="padding-left: 50px; padding-right: 40px;">Country Selection</h6>
@@ -68,8 +80,6 @@
                     <i class="material-icons">close</i>Exit Configuration</a>
             </li>
         </ul>
-        <a class="waves-effect waves-light btn modal-trigger" href="#modal1" onclick="test();">Details (Move to popup)</a>
-        <!-- Modal Structure -->
         <div id="modal1" class="modal">
             <div class="modal-content">
                 <h4>Philippines</h4>
@@ -80,7 +90,9 @@
                 <a href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
             </div>
         </div>
+
         <div id="mapid"></div>
+
         <script src="js/initmap.js"></script>
         <script src="js/jquery.min.js" type="text/javascript"></script>
         <script type="text/javascript" src="js/materialize.js"></script>
@@ -98,8 +110,11 @@
             let countryName, year = "";
 
             btnSimulate.addEventListener("click", senPredictionRequest);
+            btnSimulate.addEventListener("onClick", senPredictionRequest);
+            
 
             function senPredictionRequest(){
+                $('.sidenav').sidenav();
                 countryName = getSelectedOption(dropdownCountries);
                 year = getSelectedOption(dropdownYears);
                 let url = "http://127.0.0.1:5000/predict/COUNTRY_HOLDER/YEAR_HOLDER";
@@ -119,9 +134,8 @@
                 let markerForest = `<b>Forest Land Consumption:</b> ${response["Forest Footprint"]}<br>`;
                 let markerCarbon = `<b>Carbon Consumption:</b> ${response["Carbon Footprint"]}<br>`;
                 let markerFish = `<b>Fish Consumption:</b> ${response["Fish Footprint"]}<br>`;
-
-                let markerData = markerCountry + markerYear + markerPopulation + markerCropland 
-                + markerGrazing + markerForest + markerCarbon + markerFish;
+                let markerDetails = '<a class="modal-trigger" href="#modal1" onclick="test();">More Details</a>';
+                let markerData = markerCountry + markerYear + markerPopulation + markerCropland + markerGrazing + markerForest + markerCarbon + markerFish + markerDetails;
                 marker.bindPopup(markerData).openPopup();
             }
 
@@ -149,6 +163,7 @@
                 for(let key of countryMap.keys()){
                     dropdownCountries.appendChild(createNewChild("option", key, key));
                 }
+                $('select').formSelect();
                 $('select').formSelect();
             }
 
@@ -201,40 +216,20 @@
                             label: 'Population',
                             data: pop,
                             backgroundColor: [
-                                'rgba(255, 99, 132, 0.2)',
-                                'rgba(54, 162, 235, 0.2)',
-                                'rgba(255, 206, 86, 0.2)',
-                                'rgba(75, 192, 192, 0.2)',
-                                'rgba(153, 102, 255, 0.2)',
-                                'rgba(255, 159, 64, 0.2)'
+                                'rgba(153, 102, 255, 0.2)'
                             ],
                             borderColor: [
-                                'rgba(255,99,132,1)',
-                                'rgba(54, 162, 235, 1)',
-                                'rgba(255, 206, 86, 1)',
-                                'rgba(75, 192, 192, 1)',
-                                'rgba(153, 102, 255, 1)',
-                                'rgba(255, 159, 64, 1)'
+                                'rgba(153, 102, 255, 1)'
                             ],
                             borderWidth: 1
                         },{
                             label: 'Crop Footprint',
                             data: crop,
                             backgroundColor: [
-                                'rgba(255, 99, 132, 0.2)',
-                                'rgba(54, 162, 235, 0.2)',
-                                'rgba(255, 206, 86, 0.2)',
-                                'rgba(75, 192, 192, 0.2)',
-                                'rgba(153, 102, 255, 0.2)',
-                                'rgba(255, 159, 64, 0.2)'
+                                'rgba(255, 206, 86, 0.2)'
                             ],
                             borderColor: [
-                                'rgba(255,99,132,1)',
-                                'rgba(54, 162, 235, 1)',
-                                'rgba(255, 206, 86, 1)',
-                                'rgba(75, 192, 192, 1)',
-                                'rgba(153, 102, 255, 1)',
-                                'rgba(255, 159, 64, 1)'
+                                'rgba(255, 206, 86, 1)'
                             ],
                             borderWidth: 1
 
@@ -242,41 +237,20 @@
                             label: 'Fish Footprint',
                             data: fish,
                             backgroundColor: [
-                                'rgba(255, 99, 132, 0.2)',
-                                'rgba(54, 162, 235, 0.2)',
-                                'rgba(255, 206, 86, 0.2)',
-                                'rgba(75, 192, 192, 0.2)',
-                                'rgba(153, 102, 255, 0.2)',
-                                'rgba(255, 159, 64, 0.2)'
+                                'rgba(54, 162, 235, 0.2)'
                             ],
                             borderColor: [
-                                'rgba(255,99,132,1)',
-                                'rgba(54, 162, 235, 1)',
-                                'rgba(255, 206, 86, 1)',
-                                'rgba(75, 192, 192, 1)',
-                                'rgba(153, 102, 255, 1)',
-                                'rgba(255, 159, 64, 1)'
+                                'rgba(54, 162, 235, 1)'
                             ],
                             borderWidth: 1
-
                         },{
                             label: 'Forest Footprint',
                             data: forest,
                             backgroundColor: [
-                                'rgba(255, 99, 132, 0.2)',
-                                'rgba(54, 162, 235, 0.2)',
-                                'rgba(255, 206, 86, 0.2)',
-                                'rgba(75, 192, 192, 0.2)',
-                                'rgba(153, 102, 255, 0.2)',
-                                'rgba(255, 159, 64, 0.2)'
+                                'rgba(255, 99, 132, 0.2)'
                             ],
                             borderColor: [
-                                'rgba(255,99,132,1)',
-                                'rgba(54, 162, 235, 1)',
-                                'rgba(255, 206, 86, 1)',
-                                'rgba(75, 192, 192, 1)',
-                                'rgba(153, 102, 255, 1)',
-                                'rgba(255, 159, 64, 1)'
+                                'rgba(255,99,132,1)'
                             ],
                             borderWidth: 1
 
@@ -284,20 +258,10 @@
                             label: 'Grazing Footprint',
                             data: grazing,
                             backgroundColor: [
-                                'rgba(255, 99, 132, 0.2)',
-                                'rgba(54, 162, 235, 0.2)',
-                                'rgba(255, 206, 86, 0.2)',
-                                'rgba(75, 192, 192, 0.2)',
-                                'rgba(153, 102, 255, 0.2)',
-                                'rgba(255, 159, 64, 0.2)'
+                                'rgba(75, 192, 192, 0.2)'
                             ],
                             borderColor: [
-                                'rgba(255,99,132,1)',
-                                'rgba(54, 162, 235, 1)',
-                                'rgba(255, 206, 86, 1)',
-                                'rgba(75, 192, 192, 1)',
-                                'rgba(153, 102, 255, 1)',
-                                'rgba(255, 159, 64, 1)'
+                                'rgba(75, 192, 192, 1)'
                             ],
                             borderWidth: 1
 
@@ -305,19 +269,9 @@
                             label: 'Carbon Footprint',
                             data: carbon,
                             backgroundColor: [
-                                'rgba(255, 99, 132, 0.2)',
-                                'rgba(54, 162, 235, 0.2)',
-                                'rgba(255, 206, 86, 0.2)',
-                                'rgba(75, 192, 192, 0.2)',
-                                'rgba(153, 102, 255, 0.2)',
                                 'rgba(255, 159, 64, 0.2)'
                             ],
                             borderColor: [
-                                'rgba(255,99,132,1)',
-                                'rgba(54, 162, 235, 1)',
-                                'rgba(255, 206, 86, 1)',
-                                'rgba(75, 192, 192, 1)',
-                                'rgba(153, 102, 255, 1)',
                                 'rgba(255, 159, 64, 1)'
                             ],
                             borderWidth: 1
