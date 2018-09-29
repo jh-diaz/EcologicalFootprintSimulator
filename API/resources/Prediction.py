@@ -12,15 +12,14 @@ class Prediction(Resource):
             print(populationPrediction)
             return {
                 "Country" : countryName,
-                "Population": populationPrediction[0],
+                "Population": round(populationPrediction[0]/1000000,1),
                 "Year": year,
-                "Cropland Footprint" : footprintPrediction[0][1],
-                "Grazing Footprint" : footprintPrediction[1][1],
-                "Forest Footprint" : footprintPrediction[2][1],
-                "Carbon Footprint" : footprintPrediction[3][1],
-                "Fish Footprint" : footprintPrediction[4][1],
-                "Percentage of error" : populationPrediction[1
-                ]
+                "Cropland Footprint" : round(footprintPrediction[0][1],2),
+                "Grazing Footprint" : round(footprintPrediction[1][1],2),
+                "Forest Footprint" : round(footprintPrediction[2][1],2),
+                "Carbon Footprint" : round(footprintPrediction[3][1],2),
+                "Fish Footprint" : round(footprintPrediction[4][1],2),
+                "Percentage of error" : round(populationPrediction[1],2)
             }, 200
         except Exception as x:
             print(x)

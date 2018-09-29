@@ -17,7 +17,7 @@ class Footprint:
 
         # get years
         years = []
-        for i in range(2000, 2015):
+        for i in range(2000, 2017):
             years.append(i)
         yearValues = []
         for i in years:
@@ -40,8 +40,8 @@ class Footprint:
     # Gets the footprints (Cropland, Grazing, Forest, Carbon, Fish, Urban Land)
     # input requires the country and the year you want the predicted footprint to be in
     def getFootprints(self, country, year):
-        pop = self.getPopulation(country, 2016)[0]
-        pop2 = self.getPopulation(country, year)[0]
+        pop = self.getPopulation(country, 2016)[0] / 1000000
+        pop2 = self.getPopulation(country, year)[0] / 1000000
         popInc = pop2 - pop
         row = (self.df[self.df['Country'] == country])
         self.checkIfCountryExists(row)
@@ -52,8 +52,8 @@ class Footprint:
         for i in range(len(self.footprints)):
             footprintValues[i].insert(0, self.footprints[i])
         for i in footprintValues:
-            resourceIncRatio = popInc * i[1] / 100
-            newFpValue = (resourceIncRatio + i[1]) * pop2
+            resourceInc = popInc * i[1] / 100
+            newFpValue = (resourceInc + i[1])
             yearValues.append([i[0], abs(newFpValue)])
         return yearValues
 
