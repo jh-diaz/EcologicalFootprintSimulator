@@ -136,6 +136,7 @@
                     //For pre-defined ready state constants,
                     //refer to: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/readyState 
                     if(request.readyState == 4 && request.status == 200){
+                        console.log(request.response);
                         callback(request.response);
                     }
                 });
@@ -148,6 +149,7 @@
                 for(let key of countryMap.keys()){
                     dropdownCountries.appendChild(createNewChild("option", key, key));
                 }
+                $('select').formSelect();
             }
 
             function populateYearDropdown(){
