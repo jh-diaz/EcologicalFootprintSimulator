@@ -121,7 +121,6 @@
             let currentMarker = null;
 
             btnSimulate.addEventListener("click", senPredictionRequest);
-            
 
             function senPredictionRequest(){
                 $('.sidenav').sidenav();
@@ -140,7 +139,7 @@
                                        countryMap.get(countryName).Longitude]).addTo(mymap);
                 let markerCountry = `<b>Selected Country:</b> ${countryName}<br>`;
                 let markerYear = `<b>In Year: </b> ${year}<br>`;
-                let markerPopulation = `<b>Population:</b> ${response["Population"]}<br>`;
+                let markerPopulation = `<b>Population:</b> ${response["Population"]} million<br>`;
                 let markerCropland = `<b>Crop:</b> ${response["Cropland Footprint"]}<br>`;
                 let markerGrazing = `<b>Grazing:</b> ${response["Grazing Footprint"]}<br>`;
                 let markerForest = `<b>Forest:</b> ${response["Forest Footprint"]}<br>`;
@@ -322,6 +321,7 @@
                 lblCountryName.innerHTML = getSelectedOption(dropdownCountries);
                 sendRequest("GET", "http://127.0.0.1:5000/graph/"+countryName, "", "json", getGraphData);
             }
+            
         </script>
     </body>
 </html>

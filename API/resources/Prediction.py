@@ -19,7 +19,7 @@ class Prediction(Resource):
                 "Forest Footprint" : round(footprintPrediction[2][1],2),
                 "Carbon Footprint" : round(footprintPrediction[3][1],2),
                 "Fish Footprint" : round(footprintPrediction[4][1],2),
-                "Percentage of error" : round(populationPrediction[1],2)
+                "Percentage of error" : round(populationPrediction[1]/10000,2)
             }, 200
         except Exception as x:
             print(x)
