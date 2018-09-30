@@ -7,7 +7,7 @@ class Graph(Resource):
         try:
             model = Prediction()
             output = {}
-            for year in range(2000, 2016):
+            for year in range(2000, 2021):
                 footprintPrediction = model.getFootprints(countryName, year)
                 populationPrediction = model.getPopulation(countryName, year)
                 output[year] = {

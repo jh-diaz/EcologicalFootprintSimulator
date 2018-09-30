@@ -5,3 +5,14 @@ class Country:
 
     def getCountryLatLongPoints(self):
         return self.countries.set_index("Country").T.to_dict()
+    
+    def getAverageMAE(self):
+        from ml.Footprint import Footprint as Prediction
+        self.countries = self.countries.set_index("Country").T.to_dict()
+        totalCountries = 167
+        sumMAE = 0
+        model = Prediction()
+        for key in self.countries.keys():
+            sumMAE += model.getPopulation(key, 2000)[1]
+
+        return sumMAE/totalCountries

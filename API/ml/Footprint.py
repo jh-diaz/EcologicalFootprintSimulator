@@ -7,6 +7,7 @@ class Footprint:
         self.df = pd.read_csv('API/ml/compiled data.csv')
         self.footprints = ['Cropland Footprint', 'Grazing Footprint', 'Forest Footprint', 'Carbon Footprint',
                            'Fish Footprint']  # , 'Urban Land']
+        self.coeff = 10000
 
     # Gets the population (in millions)
     # input requires the country and the year you want the predicted population to be in
@@ -32,7 +33,7 @@ class Footprint:
         regression.train(yr, xr)
         ans = regression.errorPredict(yt)
         error = regression.getMAE(xt, ans)
-        # print('mean sq error: %.2f' % regression.getMSE(xt, ans))
+        #print('mean sq error: %.2f' % regression.getMSE(xt, ans))
 
         pred = regression.predict(year)
         return pred, error

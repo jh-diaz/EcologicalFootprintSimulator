@@ -69,6 +69,8 @@
             <div class="modal-content">
                 <h4 id="countryName">Philippines</h4>
                 <hr>
+                <p>All rights reserved to <span style="font-weight: bold;">econation.co</span> for their definitions. Check it out <a href="https://econation.co.nz/ecological-footprint-defined/" target="_blank">here.</a></p>
+                <hr>
                 <p><span style="font-weight: bold;">Population: </span>the number of people living in a certain region or country. 
                 Measured in millions.</p>
                 <canvas id="populationChart" width="400" height="200"></canvas>
@@ -164,7 +166,7 @@
             }
 
             function populateYearDropdown(){
-                for(let index=2000; index<=2015; index++){
+                for(let index=2000; index<=2020; index++){
                     dropdownYears.appendChild(createNewChild("option", index, index));
                 }
             }
@@ -191,7 +193,7 @@
                 forest = []
                 grazing = []
                 carbon = []
-                for(let i = parseInt(getSelectedOption(dropdownYears)); i <= 2015; i++){
+                for(let i = parseInt(getSelectedOption(dropdownYears)); i <= 2020; i++){
                     labels.push(i);
                     currentData = data[i];
                     pop.push(currentData["Population"])
